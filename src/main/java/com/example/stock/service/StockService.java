@@ -35,10 +35,16 @@ public class StockService {
      * 7. t2 가 endTransaction t2-99 를 실제 디비에 flush
      * 98 개의 재고 수를 예상했지만 레이스 컨디션에 의해 99 개로 남는 문제 발생
      */
-    public synchronized void decrease(Long id, Long quantity) {
+//    public synchronized void decrease(Long id, Long quantity) {
+//        Stock stock = stockRepository.findById(id).orElseThrow();
+//        stock.decrease(quantity);
+//        stockRepository.saveAndFlush(stock);
+//    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void decrease(Long id, Long quantity) {
         Stock stock = stockRepository.findById(id).orElseThrow();
         stock.decrease(quantity);
-        stockRepository.saveAndFlush(stock);
     }
 
     // 첫번째 예시
